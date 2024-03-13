@@ -1,5 +1,5 @@
 from pydantic import BaseModel, PositiveFloat, PositiveInt
-from datetime import datetime, time, date
+from datetime import time, date
 
 class Files(BaseModel):
     """
@@ -15,25 +15,7 @@ class Files(BaseModel):
 
     """
     Date: date
-
-    # @validator("Date", pre=True)
-    # def parse_date(cls, value):
-    #     return datetime.strptime(
-    #         value,
-    #         "%Y-%m-%d"
-
-    #     ).date()
-
     Time: time
-
-    # @validator("Time", pre=True)
-    # def parse_time(cls, value):
-    #     return datetime.strptime(
-    #         value,
-    #         "%H:%m"
-
-    #     ).time()
-
     GHI: PositiveInt
     DIF: PositiveInt
     DNI: PositiveInt

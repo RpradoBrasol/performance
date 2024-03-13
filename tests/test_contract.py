@@ -2,6 +2,7 @@ import pytest
 from datetime import datetime
 from app.contract import Files
 from datetime import date, time
+from pydantic import ValidationError
 
 def test_valid_raw_data():
     """
@@ -17,7 +18,7 @@ def test_valid_raw_data():
     7. Eleventh column should be positive float with three decimals 
     """
 
-    valid_raw_data = {
+    raw_data = {
         "Date": datetime.now().date(),
         "Time": datetime.now().time(),
         "GHI" : 5,
@@ -32,27 +33,27 @@ def test_valid_raw_data():
         "PVOUT": 12.244, 
     }
 
-    file = Files(**valid_raw_data)
+    file = Files(**raw_data)
 
-    assert file.Date == valid_raw_data['Date']
-    assert file.Time == valid_raw_data['Time']
-    assert file.GHI == valid_raw_data['GHI']
-    assert file.DIF == valid_raw_data['DIF']
-    assert file.DNI == valid_raw_data['DNI']
-    assert file.GTI == valid_raw_data['GTI']
-    assert file.SE == valid_raw_data['SE']
-    assert file.SA == valid_raw_data['SA']
-    assert file.TEMP == valid_raw_data['TEMP']
-    assert file.WS == valid_raw_data['WS']
-    assert file.WD == valid_raw_data['WD']
-    assert file.PVOUT == valid_raw_data['PVOUT']
+    assert file.Date == raw_data['Date']
+    assert file.Time == raw_data['Time']
+    assert file.GHI == raw_data['GHI']
+    assert file.DIF == raw_data['DIF']
+    assert file.DNI == raw_data['DNI']
+    assert file.GTI == raw_data['GTI']
+    assert file.SE == raw_data['SE']
+    assert file.SA == raw_data['SA']
+    assert file.TEMP == raw_data['TEMP']
+    assert file.WS == raw_data['WS']
+    assert file.WD == raw_data['WD']
+    assert file.PVOUT == raw_data['PVOUT']
 
 def test_invalid_raw_data_format():
     """
     Tests the creation of an instance of the File class with invalid data due to incorrect format.
     """
 
-    invalid_raw_data = {
+    raw_data = {
         "Date": "2012-13-02",
         "Time": "25:41",
         "GHI" : 5.1,
@@ -67,17 +68,6 @@ def test_invalid_raw_data_format():
         "PVOUT": "-12.4g", 
     }
 
-    file = Files(**invalid_raw_data)
-
-    assert file.Date == invalid_raw_data['Date']
-    assert file.Time == invalid_raw_data['Time']
-    assert file.GHI == invalid_raw_data['GHI']
-    assert file.DIF == invalid_raw_data['DIF']
-    assert file.DNI == invalid_raw_data['DNI']
-    assert file.GTI == invalid_raw_data['GTI']
-    assert file.SE == invalid_raw_data['SE']
-    assert file.SA == invalid_raw_data['SA']
-    assert file.TEMP == invalid_raw_data['TEMP']
-    assert file.WS == invalid_raw_data['WS']
-    assert file.WD == invalid_raw_data['WD']
-    assert file.PVOUT == invalid_raw_data['PVOUT']
+    with pytest.raises(ValidationError):
+        Files(**raw_data)
+    
